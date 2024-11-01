@@ -1,0 +1,31 @@
+AWS creating policy this
+This is format of policy that you might create in order to get work it fine
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"aEffect": "Allow",
+			"Action": [
+				"ecr:PutImage",
+				"ecr:InitiateLayerUpload",
+				"ecr:UploadLayerPart",
+				"ecr:BatchCheckLayerAvailability",
+				"ecr:UploadLayerPart",
+				"ecr:CompleteLayerUpload"
+			],
+			"Resource": [
+				"arn:aws:ecr:ap-south-1:211125601102:repository/repo"
+			]
+		},
+		{
+			"Sid": "GetAuthorizationToken",
+			"Effect": "Allow",
+			"Action": [
+				"ecr:GetAuthorizationToken"
+			],
+			"Resource": [
+				"*"
+			]
+		}
+	]
+}
