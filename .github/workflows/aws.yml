@@ -85,8 +85,6 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest  
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:latest" >> $GITHUB_OUTPUT
-    - name: Deploy docker image to ec2
-      uses: appleboy/ssh-action@master
 #    - name: Build, tag, and push image to Amazon ECR
 #      id: build-image
 #      env:
