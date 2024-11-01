@@ -69,7 +69,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: '17'
+        distribution: 'amazon'
 
       # Step 3: Build with Maven
     - name: Build and package with Maven
