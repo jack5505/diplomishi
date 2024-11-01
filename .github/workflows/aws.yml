@@ -60,22 +60,23 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: "ap-south-1"
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
-      # Step 2: Set up Java environment
     - name: Set up JDK 17
       uses: actions/checkout@v4
       with:
         java-version: '17'
         distribution: 'corretto'
 
-#      # Step 3: Build with Maven
-#    - name: Build and package with Maven
-#      run: mvn clean package
-#      env:
-#        MAVEN_OPTS: -Dmaven.test.skip=true
+
+    - name: Build and package with Maven
+      run: mvn clean package
+      env:
+        MAVEN_OPTS: -Dmaven.test.skip=true
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+
 
 
     - name: Build, Tag, and Push the Image to Amazon ECR
