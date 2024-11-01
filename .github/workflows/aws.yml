@@ -44,8 +44,8 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
-    name: Deploy
+  build:
+    name: Build
     runs-on: ubuntu-latest
     environment: production
 
@@ -76,9 +76,6 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-
-
-
     - name: Build, Tag, and Push the Image to Amazon ECR
       id: build-image
       env:
@@ -88,7 +85,8 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest  
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-
+    - name: Deploy docker image to ec2
+      uses: appleboy/ssh-action@master
 #    - name: Build, tag, and push image to Amazon ECR
 #      id: build-image
 #      env:
@@ -117,4 +115,27 @@ jobs:
 #        service: ${{ env.ECS_SERVICE }}
 #        cluster: ${{ env.ECS_CLUSTER }}
 #        wait-for-service-stability: true
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: SSH to EC2 and deploy
+        env:
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_INSTANCE_IP: ${{ secrets.EC2_INSTANCE_IP }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+            echo "$EC2_SSH_KEY" > ec2_key.pem
+            chmod 600 ec2_key.pem
+            ssh -o StrictHostKeyChecking=no -i ec2_key.pem ubuntu@$EC2_INSTANCE_IP << 'EOF'
+                      # Install AWS CLI if not installed
+            if ! command -v aws &> /dev/null
+            then
+              echo "AWS CLI not found, installing..."
+              sudo apt-get update && sudo apt-get install -y awscli
+            fi
+            aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $ECR_REPOSITORY
+            # Pull the new Docker image
+            docker pull $ECR_REPOSITORY:latest
