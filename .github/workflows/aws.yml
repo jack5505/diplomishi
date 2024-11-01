@@ -61,10 +61,10 @@ jobs:
         aws-region: "ap-south-1"
 
     - name: Set up JDK 17
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
       with:
         java-version: '17'
-        distribution: 'corretto'
+        distribution: 'temurin'
 
 
     - name: Build and package with Maven
