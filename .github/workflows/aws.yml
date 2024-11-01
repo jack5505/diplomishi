@@ -71,11 +71,11 @@ jobs:
         java-version: '17'
         distribution: 'corretto'
 
-      # Step 3: Build with Maven
-    - name: Build and package with Maven
-      run: mvn clean package
-      env:
-        MAVEN_OPTS: -Dmaven.test.skip=true
+#      # Step 3: Build with Maven
+#    - name: Build and package with Maven
+#      run: mvn clean package
+#      env:
+#        MAVEN_OPTS: -Dmaven.test.skip=true
 
 
     - name: Build, Tag, and Push the Image to Amazon ECR
