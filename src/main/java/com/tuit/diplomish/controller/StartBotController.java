@@ -1,6 +1,8 @@
 package com.tuit.diplomish.controller;
 
 
+import com.tuit.diplomish.config.RegisterBot;
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +26,18 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
 
     private final String botToken = "8019508424:AAH5MVR8-EcsSyCof8uRUablHGhEuvpprLk";
 
-    private TelegramClient telegramClient  = new OkHttpTelegramClient(botToken);
+    private final TelegramClient telegramClient;
+
+    private final RegisterBot registerBot;
+
+    @PostConstruct
+    public void init() {
+        try {
+            registerBot.registerBot(botToken,this);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     @Override
