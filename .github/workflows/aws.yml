@@ -134,6 +134,6 @@ jobs:
               echo "AWS CLI not found, installing..."
               sudo apt-get update && sudo apt-get install -y awscli
             fi
-            aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $ECR_REPOSITORY
+            aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 211125601102.dkr.ecr.ap-south-1.amazonaws.com/repo:latest
             # Pull the new Docker image
             docker pull $ECR_REPOSITORY:latest
