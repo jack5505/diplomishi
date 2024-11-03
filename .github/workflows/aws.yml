@@ -113,4 +113,5 @@ jobs:
             sudo docker pull  211125601102.dkr.ecr.ap-south-1.amazonaws.com/repo:latest | true
             sudo docker stop start_up | true
             sudo docker system prune -f | true
-            sudo docker run -e TZ=Asia/Karachi  --name=start_up -d -p 80:8080 211125601102.dkr.ecr.ap-south-1.amazonaws.com/repo:latest  
+            sudo docker run -e TZ=Asia/Karachi  --name=start_up -d -p 80:8080 211125601102.dkr.ecr.ap-south-1.amazonaws.com/repo:latest
+            echo "everything is done so far SUCCESS"
