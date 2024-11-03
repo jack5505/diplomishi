@@ -1,6 +1,7 @@
 package com.tuit.diplomish.ui;
 
 import com.tuit.diplomish.common.Text;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service("FIRST_RESPONSE")
 public class FirstOptionResponseStrategy  implements ResponseStrategy<ReplyKeyboardMarkup>{
+
     @Override
     public ReplyKeyboardMarkup makeResponse() {
         KeyboardButton button = new KeyboardButton(Text.REGISTER);
@@ -22,10 +24,27 @@ public class FirstOptionResponseStrategy  implements ResponseStrategy<ReplyKeybo
         KeyboardButton login = new KeyboardButton(Text.LOGIN);
         KeyboardRow row2 = new KeyboardRow();
         row2.add(login);
+        return  getReplyKeyboardMarkup(row,row2);
+    }
+
+    @Override
+    public ReplyKeyboardMarkup sharePhoneNumberToRegister() {
+        KeyboardButton button = new KeyboardButton(Text.PHONE);
+        button.setRequestContact(true);
+        KeyboardRow row = new KeyboardRow();
+        row.add(button);
+        return getReplyKeyboardMarkup(row);
+    }
+
+    @NotNull
+    private static ReplyKeyboardMarkup getReplyKeyboardMarkup(KeyboardRow ... row) {
         List<KeyboardRow> rows = new ArrayList<>();
-        rows.add(row);
-        rows.add(row2);
-        return  new ReplyKeyboardMarkup(rows);
+        for(int i = 0 ;i < row.length; i++){
+            rows.add(row[i]);
+        }
+        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup(rows);
+        markup.setResizeKeyboard(true);
+        return markup;
     }
 
 

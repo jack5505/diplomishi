@@ -4,4 +4,6 @@ public interface ResponseStrategy<T> {
 
     T makeResponse();
 
+    T sharePhoneNumberToRegister();
+
 }

@@ -63,7 +63,13 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
                 makeResponse.append("telegramdaki nastroyka qiligan tili " + update.getMessage().getFrom().getLanguageCode());
                 SendMessage sendMessage = new SendMessage(update.getMessage().getChatId() + "",makeResponse.toString());
                 responseToMessage(sendMessage);
-            }else
+            }
+            else if(Text.REGISTER.strip().equals(update.getMessage().getText())){
+                SendMessage sendMessage = new SendMessage(update.getMessage().getChatId()+ "","iltimo registratsiyadan o`ting");
+                sendMessage.setReplyMarkup(responseStrategy.sharePhoneNumberToRegister());
+                responseToMessage(sendMessage);
+            }
+            else
                 responseToMessage(update);
 
         }

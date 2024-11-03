@@ -10,4 +10,7 @@ public final class Text {
     public static final String LOGIN = """
             🛤 login 🛤
             """;
+    public static final String PHONE = """
+            📞share phone 📞
+            """;
 }
