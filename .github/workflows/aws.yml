@@ -115,3 +115,9 @@ jobs:
             sudo docker system prune -f | true
             sudo docker run -e TZ=Asia/Karachi  --name=start_up -d -p 80:8080 211125601102.dkr.ecr.ap-south-1.amazonaws.com/repo:latest
             echo "everything is done so far SUCCESS"
+            echo "clean from not needed images of server"
+            sudo docker images -f "dangling=true" | true
+            sudo docker image prune -f | true
+            echo "clean not needed images"
+
+
