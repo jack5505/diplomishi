@@ -110,4 +110,4 @@ jobs:
             fi
             aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 211125601102.dkr.ecr.ap-south-1.amazonaws.com
             # Pull the new Docker image
-            docker pull  211125601102.dkr.ecr.ap-south-1.amazonaws.com/repo:latest
+            sudo docker pull  211125601102.dkr.ecr.ap-south-1.amazonaws.com/repo:latest
