@@ -1,17 +1,21 @@
 AWS creating policy this
 This is format of policy that you might create in order to get work it fine
+This is updatedte policy for users
+
 {
 	"Version": "2012-10-17",
 	"Statement": [
 		{
-			"aEffect": "Allow",
+			"Effect": "Allow",
 			"Action": [
 				"ecr:PutImage",
 				"ecr:InitiateLayerUpload",
 				"ecr:UploadLayerPart",
 				"ecr:BatchCheckLayerAvailability",
 				"ecr:UploadLayerPart",
-				"ecr:CompleteLayerUpload"
+				"ecr:CompleteLayerUpload",
+				"ecr:BatchGetImage",
+				"ecr:GetDownloadUrlForLayer"
 			],
 			"Resource": [
 				"arn:aws:ecr:ap-south-1:211125601102:repository/repo"
