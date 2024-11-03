@@ -13,4 +13,5 @@ public final class Text {
     public static final String PHONE = """
             📞share phone 📞
             """;
+    public static final String START = "/start";
 }

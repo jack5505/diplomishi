@@ -1,27 +1,25 @@
 package com.tuit.diplomish.controller;
 
 
+import com.tuit.diplomish.command.kernel.BotCommand;
+import com.tuit.diplomish.command.Login;
+import com.tuit.diplomish.command.Register;
+import com.tuit.diplomish.command.Start;
 import com.tuit.diplomish.common.Text;
 import com.tuit.diplomish.config.RegisterBot;
 import com.tuit.diplomish.ui.ResponseStrategy;
 import jakarta.annotation.PostConstruct;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-import java.util.EnumMap;
-import java.util.Objects;
-import java.util.function.Supplier;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,8 +34,20 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
 
     private final ResponseStrategy<ReplyKeyboardMarkup> responseStrategy;
 
+    private final Login login;
+
+    private final Register register;
+
+    private final Start start;
+
+    private final Map<String,BotCommand> allActions = new HashMap<>();
+
+
     @PostConstruct
     public void init() {
+        allActions.put(Text.START,start);
+        allActions.put(Text.REGISTER.strip(),register);
+        allActions.put(Text.LOGIN.strip(),login);
         try {
             registerBot.registerBot(botToken,this);
         } catch (TelegramApiException e) {
@@ -54,42 +64,10 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
             log.info("text from userName: {} userId:{}",
                     update.getMessage().getFrom().getUserName(),
                     update.getMessage().getFrom().getId());
-            if(Text.LOGIN.strip().equals(update.getMessage().getText()))
-            {
-                StringBuilder makeResponse = new StringBuilder();
-                makeResponse.append(update.getMessage().getFrom().getFirstName() + " ");
-                makeResponse.append(update.getMessage().getFrom().getLastName() + " ");
-                makeResponse.append(update.getMessage().getFrom().getUserName() + " \n");
-                makeResponse.append("telegramdaki nastroyka qiligan tili " + update.getMessage().getFrom().getLanguageCode());
-                SendMessage sendMessage = new SendMessage(update.getMessage().getChatId() + "",makeResponse.toString());
-                responseToMessage(sendMessage);
-            }
-            else if(Text.REGISTER.strip().equals(update.getMessage().getText())){
-                SendMessage sendMessage = new SendMessage(update.getMessage().getChatId()+ "","iltimo registratsiyadan o`ting");
-                sendMessage.setReplyMarkup(responseStrategy.sharePhoneNumberToRegister());
-                responseToMessage(sendMessage);
-            }
-            else
-                responseToMessage(update);
+            allActions.get(update.getMessage().getText()).execute(update);
 
         }
     }
 
-    private void responseToMessage(Update update)
-    {
-        SendMessage sendMessage = new SendMessage(update.getMessage().getChatId() + "", update.getMessage().getText());
-        sendMessage.setReplyMarkup(responseStrategy.makeResponse());
-        try{
-            telegramClient.execute(sendMessage);
-        }catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-    private void responseToMessage(SendMessage sendMessage){
-        try {
-            telegramClient.execute(sendMessage);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 }
