@@ -83,9 +83,9 @@ jobs:
         ECR_REPOSITORY: repo
       run: |
         docker build -t  start_up .
-        docker tag start_up $ECR_REGISTRY/$ECR_REPOSITORY:latest 
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest  
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:latest" >> $GITHUB_OUTPUT
+        docker tag start_up $ECR_REGISTRY/$ECR_REPOSITORY
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY 
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY" >> $GITHUB_OUTPUT
 
   deploy:
     name: Deploy
