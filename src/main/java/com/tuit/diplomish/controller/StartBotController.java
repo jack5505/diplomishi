@@ -1,6 +1,7 @@
 package com.tuit.diplomish.controller;
 
 
+import com.tuit.diplomish.command.SharePhoneRegister;
 import com.tuit.diplomish.command.kernel.BotCommand;
 import com.tuit.diplomish.command.Login;
 import com.tuit.diplomish.command.Register;
@@ -40,6 +41,8 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
 
     private final Start start;
 
+    private final SharePhoneRegister sharePhoneRegister;
+
     private final Map<String,BotCommand> allActions = new HashMap<>();
 
 
@@ -65,7 +68,8 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
                     update.getMessage().getFrom().getUserName(),
                     update.getMessage().getFrom().getId());
             allActions.get(update.getMessage().getText()).execute(update);
-
+        }else{
+            sharePhoneRegister.execute(update);
         }
     }
 
