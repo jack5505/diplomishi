@@ -51,6 +51,7 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
         allActions.put(Text.START,start);
         allActions.put(Text.REGISTER.strip(),register);
         allActions.put(Text.LOGIN.strip(),login);
+        allActions.put(Text.REGISTER.strip(),sharePhoneRegister);
         try {
             registerBot.registerBot(botToken,this);
         } catch (TelegramApiException e) {
