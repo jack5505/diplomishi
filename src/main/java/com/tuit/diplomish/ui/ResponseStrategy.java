@@ -6,4 +6,6 @@ public interface ResponseStrategy<T> {
 
     T sharePhoneNumberToRegister();
 
+    T chooseOption();
+
 }

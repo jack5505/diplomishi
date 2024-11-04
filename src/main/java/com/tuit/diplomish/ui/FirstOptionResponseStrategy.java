@@ -36,6 +36,17 @@ public class FirstOptionResponseStrategy  implements ResponseStrategy<ReplyKeybo
         return getReplyKeyboardMarkup(row);
     }
 
+    @Override
+    public ReplyKeyboardMarkup chooseOption() {
+        KeyboardButton admin = new KeyboardButton(Text.ADMIN);
+        KeyboardRow row = new KeyboardRow();
+        row.add(admin);
+        KeyboardButton user = new KeyboardButton(Text.USER);
+        KeyboardRow row1 = new KeyboardRow();
+        row1.add(user);
+        return getReplyKeyboardMarkup(row,row1);
+    }
+
     @NotNull
     private static ReplyKeyboardMarkup getReplyKeyboardMarkup(KeyboardRow ... row) {
         List<KeyboardRow> rows = new ArrayList<>();

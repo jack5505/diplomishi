@@ -14,4 +14,11 @@ public final class Text {
             📞share phone 📞
             """;
     public static final String START = "/start";
+
+    public static final String ADMIN = """
+            🏚 ADMIN 🏚
+            """;
+    public static final String USER = """
+            🎓 USER(STUDENT) 🎓
+            """;
 }
