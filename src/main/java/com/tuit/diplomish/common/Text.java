@@ -1,5 +1,9 @@
 package com.tuit.diplomish.common;
 
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
+
 public  enum Text {
 
     REGISTER("""
@@ -33,5 +37,12 @@ public  enum Text {
 
     public java.lang.String getText() {
         return text;
+    }
+    public static final Text[] VALUES = values();
+
+    public static Optional<Text> getByText(String text) {
+        return Arrays.stream(VALUES)
+                .filter(txt -> Objects.equals(txt.getText().strip(),text))
+                .findFirst();
     }
 }
