@@ -1,10 +1,13 @@
 package com.tuit.diplomish.config;
 
 
+import com.tuit.diplomish.command.kernel.MenuOperationServiceFactory;
 import com.tuit.diplomish.controller.StartBotController;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ServiceLocatorFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
@@ -38,6 +41,13 @@ public class RegisterBot extends TelegramBotsLongPollingApplication {
     @Override
     public BotSession registerBot(String botToken, LongPollingUpdateConsumer updatesConsumer) throws TelegramApiException {
         return super.registerBot(botToken, updatesConsumer);
+    }
+
+    @Bean
+    public FactoryBean<?> menuFactoryBean() {
+        var bean = new ServiceLocatorFactoryBean();
+        bean.setServiceLocatorInterface(MenuOperationServiceFactory.class);
+        return bean;
     }
 
 

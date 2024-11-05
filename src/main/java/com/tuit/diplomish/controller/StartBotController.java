@@ -3,6 +3,7 @@ package com.tuit.diplomish.controller;
 
 import com.tuit.diplomish.command.*;
 import com.tuit.diplomish.command.kernel.BotCommand;
+import com.tuit.diplomish.command.kernel.MenuOperationServiceFactory;
 import com.tuit.diplomish.common.Text;
 import com.tuit.diplomish.config.RegisterBot;
 import com.tuit.diplomish.ui.ResponseStrategy;
@@ -42,15 +43,20 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
 
     private final DefaultAnswer defaultAnswer;
 
+    private final Admin admin;
+
+    private final MenuOperationServiceFactory factory;
+
     private final Map<String,BotCommand> allActions = new HashMap<>();
 
 
     @PostConstruct
     public void init() {
-        allActions.put(Text.START,start);
-        allActions.put(Text.REGISTER.strip(),register);
-        allActions.put(Text.LOGIN.strip(),login);
-        allActions.put(Text.PHONE.strip(),sharePhoneRegister);
+        allActions.put(Text.START.getText().strip(),start);
+        allActions.put(Text.REGISTER.getText().strip(),register);
+        allActions.put(Text.LOGIN.getText().strip(),login);
+        allActions.put(Text.PHONE.getText().strip(),sharePhoneRegister);
+        allActions.put(Text.ADMIN.getText().strip(),admin);
         try {
             registerBot.registerBot(botToken,this);
         } catch (TelegramApiException e) {
@@ -67,6 +73,7 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
             log.info("text from userName: {} userId:{}",
                     update.getMessage().getFrom().getUserName(),
                     update.getMessage().getFrom().getId());
+            factory.getService(Text.valueOf(update.getMessage().getText())).execute(update);
             allActions.getOrDefault(update.getMessage().getText(),defaultAnswer).execute(update);
         }else{
             sharePhoneRegister.execute(update);

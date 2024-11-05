@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-@Service
+@Service("REGISTER")
 public class Register  extends TelegramSendMessage {
 
     private final ResponseStrategy<ReplyKeyboardMarkup> responseStrategy;

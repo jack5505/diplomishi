@@ -8,4 +8,6 @@ public interface ResponseStrategy<T> {
 
     T chooseOption();
 
+    T adminMenuAddQuestions();
+
 }

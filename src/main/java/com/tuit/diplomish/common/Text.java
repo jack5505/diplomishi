@@ -1,24 +1,37 @@
 package com.tuit.diplomish.common;
 
-public final class Text {
-    private Text() {}
+public  enum Text {
 
-    public static final String REGISTER = """
+    REGISTER("""
             🎤 register 🎤
-            """;
+            """),
 
-    public static final String LOGIN = """
+    LOGIN ( """
             🛤 login 🛤
-            """;
-    public static final String PHONE = """
+            """),
+    PHONE("""
             📞share phone 📞
-            """;
-    public static final String START = "/start";
+            """),
+    START("/start"),
 
-    public static final String ADMIN = """
+    ADMIN("""
             🏚 ADMIN 🏚
-            """;
-    public static final String USER = """
+            """),
+    USER("""
             🎓 USER(STUDENT) 🎓
-            """;
+            """),
+    ADMIN_ADD_QUESTIONS("""
+            Savol qo`shish ❔❓❓❓
+            """),
+    DEFAULT("default");
+
+    private final String text;
+
+    Text(java.lang.String text) {
+        this.text = text;
+    }
+
+    public java.lang.String getText() {
+        return text;
+    }
 }

@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("PHONE")
 @Slf4j
 public class SharePhoneRegister extends TelegramSendMessage {
     private List<UserDTO> userDTOList = new ArrayList<>();
