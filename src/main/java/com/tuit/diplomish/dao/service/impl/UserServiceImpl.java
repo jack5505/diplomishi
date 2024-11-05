@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity save(UserEntity entity) {
-        return null;
+        return userRepository.save(entity);
     }
 
     @Override
@@ -32,5 +32,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Object id) {
 
+    }
+
+    @Override
+    public UserEntity createUser(String username, 
+                                 String phone, 
+                                 Long userId, 
+                                 String firstName, 
+                                 String lastName) 
+    {
+        return userRepository.save(UserEntity.builder()
+                .userId(userId)
+                .username(username)
+                .firstName(firstName)
+                .lastName(lastName)
+                .phoneNumber(phone).build());
+
+    }
+
+    @Override
+    public Optional<UserEntity> findByUserId(Long userId) {
+        return userRepository.findById(userId);
     }
 }
