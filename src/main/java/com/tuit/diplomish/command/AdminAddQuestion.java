@@ -39,10 +39,20 @@ public class AdminAddQuestion extends TelegramSendMessage {
     {
         String text = update.getMessage().getText();
         SendMessage sendMessage = null;
-        if(!flagQuestions && Objects.nonNull(questionsSizeToAdd) &&  questionsSizeToAdd >= 0){
-            if(answerToQuestion == 4){
-
+        if(!flagQuestions && Objects.nonNull(questionsSizeToAdd) &&  questionsSizeToAdd >= 0)
+        {
+            if(answerToQuestion != 1){
+                temp.add(text);
+                answerToQuestion--;
+            }else{
+                    temp.add(text);
+                    answerToQuestion--;
+                    flagQuestions = true;
+                    questionsSizeToAdd --;
             }
+            sendMessage = sendMessage(update.getMessage().getChatId()+"", """ 
+                    Qoshildi ✅ 
+                    """);
         }
         else if(flagQuestions && Objects.nonNull(questionsSizeToAdd) && questionsSizeToAdd >= 1){
             questions.add(update.getMessage().getText());

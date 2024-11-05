@@ -31,6 +31,7 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
 
     private final RegisterBot registerBot;
 
+    // This helps us to change to menu to other menu
     private final Set<String> changeMenu = Set.of(Text.PHONE.getText().strip(),
                                                   Text.ADMIN.getText().strip(),
                                                   Text.USER.getText().strip(),
