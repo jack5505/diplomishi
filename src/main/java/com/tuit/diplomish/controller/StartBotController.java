@@ -1,11 +1,8 @@
 package com.tuit.diplomish.controller;
 
 
-import com.tuit.diplomish.command.SharePhoneRegister;
+import com.tuit.diplomish.command.*;
 import com.tuit.diplomish.command.kernel.BotCommand;
-import com.tuit.diplomish.command.Login;
-import com.tuit.diplomish.command.Register;
-import com.tuit.diplomish.command.Start;
 import com.tuit.diplomish.common.Text;
 import com.tuit.diplomish.config.RegisterBot;
 import com.tuit.diplomish.ui.ResponseStrategy;
@@ -43,6 +40,8 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
 
     private final SharePhoneRegister sharePhoneRegister;
 
+    private final DefaultAnswer defaultAnswer;
+
     private final Map<String,BotCommand> allActions = new HashMap<>();
 
 
@@ -68,7 +67,7 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
             log.info("text from userName: {} userId:{}",
                     update.getMessage().getFrom().getUserName(),
                     update.getMessage().getFrom().getId());
-            allActions.get(update.getMessage().getText()).execute(update);
+            allActions.getOrDefault(update.getMessage().getText(),defaultAnswer).execute(update);
         }else{
             sharePhoneRegister.execute(update);
         }
