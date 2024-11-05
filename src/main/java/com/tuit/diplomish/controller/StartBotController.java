@@ -18,7 +18,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,7 +31,17 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
 
     private final RegisterBot registerBot;
 
+    private final Set<String> changeMenu = Set.of(Text.PHONE.getText().strip(),
+                                                  Text.ADMIN.getText().strip(),
+                                                  Text.USER.getText().strip(),
+                                                  Text.LOGIN.getText().strip(),
+                                                  Text.REGISTER.getText().strip(),
+                                                  Text.START.getText().strip(),
+                                                  Text.ADMIN_ADD_QUESTIONS.getText().strip());
+
     private final MenuOperationServiceFactory factory;
+    private BotCommand current;
+    private final SharePhoneRegister sharePhoneRegister;
 
     @PostConstruct
     public void init() {
@@ -49,8 +61,14 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
             log.info("text from userName: {} userId:{}",
                     update.getMessage().getFrom().getUserName(),
                     update.getMessage().getFrom().getId());
-            factory.getService(Text.getByText(update.getMessage().getText())
-                    .orElseGet(() -> Text.DEFAULT)).execute(update);
+            if(changeMenu.contains(update.getMessage().getText()))
+            {
+                this.current = factory.getService(Text.getByText(update.getMessage().getText())
+                        .orElseGet(() -> Text.DEFAULT));
+            }
+            this.current.execute(update);
+        }else{
+            sharePhoneRegister.execute(update);
         }
     }
 
