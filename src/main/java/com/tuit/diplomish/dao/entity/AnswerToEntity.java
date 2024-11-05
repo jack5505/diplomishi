@@ -1,13 +1,15 @@
 package com.tuit.diplomish.dao.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "answers")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AnswerToEntity {
     @Transient
     private static final String sequenceName = "questions_id_seq";

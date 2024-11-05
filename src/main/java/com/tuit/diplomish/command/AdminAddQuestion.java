@@ -1,10 +1,13 @@
 package com.tuit.diplomish.command;
 
-import com.tuit.diplomish.command.kernel.BotCommand;
+
 import com.tuit.diplomish.command.kernel.TelegramSendMessage;
+import com.tuit.diplomish.dao.service.AnswerService;
+import com.tuit.diplomish.dao.service.QuestionService;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -27,10 +30,18 @@ public class AdminAddQuestion extends TelegramSendMessage {
     List<String> temp = new ArrayList<>();
     private boolean flagQuestions = false;
     private Integer answerToQuestion = 4;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
+    private Long currentQuestionId;
 
-    public AdminAddQuestion(TelegramClient telegramClient) {
+    public AdminAddQuestion(TelegramClient telegramClient,
+                            QuestionService questionService,
+                            AnswerService answerService
+                            ) {
         super(telegramClient);
         this.telegramClient = telegramClient;
+        this.questionService = questionService;
+        this.answerService = answerService;
 
     }
 
@@ -75,13 +86,17 @@ public class AdminAddQuestion extends TelegramSendMessage {
         responseToMessage(sendMessage);
     }
 
-    private SendMessage sendMessage(String chatId,String text){
+    public SendMessage sendMessage(String chatId,String text){
         return new SendMessage(chatId, text);
     }
 
-    private boolean checkIsDigit(String text){
+    public boolean checkIsDigit(String text){
         return (Pattern.matches("\\d+", text));
     }
+
+
+
+
 
 
 }

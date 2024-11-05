@@ -1,6 +1,7 @@
 package com.tuit.diplomish.config;
 
 
+
 import com.tuit.diplomish.command.kernel.MenuOperationServiceFactory;
 import com.tuit.diplomish.controller.StartBotController;
 import jakarta.annotation.PostConstruct;
@@ -49,6 +50,8 @@ public class RegisterBot extends TelegramBotsLongPollingApplication {
         bean.setServiceLocatorInterface(MenuOperationServiceFactory.class);
         return bean;
     }
+
+
 
 
 }
