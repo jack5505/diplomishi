@@ -56,7 +56,7 @@ public class SharePhoneRegister extends TelegramSendMessage {
         final User from = update.getMessage().getFrom();
         log.info(update.toString());
         if(contact != null) {
-            saveData(contact, update.getMessage().getFrom().getUserName());
+            saveData(contact, update.getMessage().getFrom().getUserName(),from.getId());
         }
         log.info(userDTOList.toString());
         //
@@ -67,8 +67,10 @@ public class SharePhoneRegister extends TelegramSendMessage {
         sendMessage.setReplyMarkup(responseStrategy.chooseOption());
         responseToMessage(sendMessage);
     }
-    private void saveData(Contact contact,String userName)
+    private void saveData(Contact contact,String userName,Long userId)
     {
-        userService.createUser(userName,contact.getPhoneNumber(),contact.getUserId(),contact.getFirstName(), contact.getLastName());
+        userService.findByUserId(userId)
+                .orElseGet(() -> userService.createUser(userName,contact.getPhoneNumber(),
+                                    contact.getUserId(),contact.getFirstName(), contact.getLastName()));
     }
 }
