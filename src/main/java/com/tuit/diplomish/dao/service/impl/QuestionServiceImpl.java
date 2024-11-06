@@ -30,7 +30,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Optional<QuestionsEntity> findById(Object id) {
-        return Optional.empty();
+        return questionRepository.findById((Long) id);
     }
 
     @Override

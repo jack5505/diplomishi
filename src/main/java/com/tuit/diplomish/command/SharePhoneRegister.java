@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Contact;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
@@ -51,14 +52,17 @@ public class SharePhoneRegister extends TelegramSendMessage {
     public void execute(Update update)
     {
 
+        final Contact contact = update.getMessage().getContact();
+        final User from = update.getMessage().getFrom();
         log.info(update.toString());
-        Contact contact = update.getMessage().getContact();
-        saveData(contact,update.getMessage().getFrom().getUserName());
+        if(contact != null) {
+            saveData(contact, update.getMessage().getFrom().getUserName());
+        }
         log.info(userDTOList.toString());
         //
         final String welcome_page = String.format("""
                 👨🏼‍💻 WELCOME TO OUR BOT!!!  %s  %s  🥳🤩🤗
-                """, contact.getLastName(),contact.getFirstName());
+                """, from.getLastName(), from.getFirstName());
         SendMessage sendMessage = new SendMessage(update.getMessage().getChatId() + "",welcome_page);
         sendMessage.setReplyMarkup(responseStrategy.chooseOption());
         responseToMessage(sendMessage);
