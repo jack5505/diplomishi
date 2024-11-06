@@ -12,6 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service("FIRST_RESPONSE")
 public class FirstOptionResponseStrategy  implements ResponseStrategy<ReplyKeyboardMarkup>{
@@ -53,6 +55,23 @@ public class FirstOptionResponseStrategy  implements ResponseStrategy<ReplyKeybo
         KeyboardRow row = new KeyboardRow();
         row.add(button);
         return getReplyKeyboardMarkup(row);
+    }
+
+    @Override
+    public ReplyKeyboardMarkup makeAnswers(List<String> answers) {
+        return getReplyKeyboardMarkup(answers.stream()
+                .map(i -> new KeyboardButton(i))
+                .map(k -> {
+                    var rowTemp = new KeyboardRow();
+                    rowTemp.add(k);
+                    return rowTemp;
+                }).toList());
+    }
+
+    private static ReplyKeyboardMarkup getReplyKeyboardMarkup(List<KeyboardRow> row) {
+        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup(row);
+        markup.setResizeKeyboard(true);
+        return markup;
     }
 
     @NotNull

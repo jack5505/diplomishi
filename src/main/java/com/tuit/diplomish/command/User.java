@@ -17,28 +17,27 @@ public class User extends TelegramSendMessage {
 
     private final TelegramClient telegramClient;
     private final ResponseStrategy responseStrategy;
-    private final QuestionService questionService;
-    private final AnswerService answerService;
+    private final MakeQuestionListUI makeQuestionListUI;
+    // this flag tells us asking question or Asnwer
+    private Boolean questionOrAnswer = Boolean.TRUE;
+
 
     public User(TelegramClient telegramClient,
-                MakeQuestionListUI makeQuestionListUI,
                 FirstOptionResponseStrategy responseStrategy,
                 QuestionService questionService,
-                AnswerService answerService) {
+                AnswerService answerService,
+                MakeQuestionListUI makeQuestionListUI,
+                SharePhoneRegister sharePhoneRegister) {
         super(telegramClient);
         this.telegramClient = telegramClient;
         this.responseStrategy = responseStrategy;
-        this.questionService = questionService;
-        this.answerService =  answerService;
+        this.makeQuestionListUI = makeQuestionListUI;
     }
 
     @Override
     public void execute(Update update)
     {
-
-        SendMessage sendMessage = new SendMessage(update.getMessage().getChatId() + "","Savollar");
-//        sendMessage.setReplyMarkup(this.makeQuestionListUI
-//                .makeList(update.getMessage().getFrom().getId()));
-        responseToMessage(sendMessage);
+        responseToMessage(makeQuestionListUI.makeList(update.getMessage().getFrom().getId(),
+                update.getMessage().getChatId()+""));
     }
 }

@@ -1,5 +1,7 @@
 package com.tuit.diplomish.ui;
 
+import java.util.List;
+
 public interface ResponseStrategy<T> {
 
     T makeResponse();
@@ -10,6 +12,6 @@ public interface ResponseStrategy<T> {
 
     T adminMenuAddQuestions();
 
-    // T makeAnswers(Long userId);
+     T makeAnswers(List<String> answers);
 
 }
