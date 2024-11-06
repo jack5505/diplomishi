@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,6 +48,11 @@ public class AnswerServiceImpl implements AnswerService {
                 .answer(text)
                 .correctAnswer(right)
                 .build());
+    }
+
+    @Override
+    public List<AnswerToEntity> listAnswersToQuestion(Long questionId) {
+        return answerRepository.findByQuestionsEntity_Id(questionId);
     }
 
 }

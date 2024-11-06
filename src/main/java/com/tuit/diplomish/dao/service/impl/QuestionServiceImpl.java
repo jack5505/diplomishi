@@ -9,6 +9,8 @@ import com.tuit.diplomish.exceptions.BadRequestAlertExceptions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,5 +50,14 @@ public class QuestionServiceImpl implements QuestionService {
         entity.setContent(question);
         entity.setUser(userEntity);
         return questionRepository.save(entity);
+    }
+
+    @Override
+    public List<QuestionsEntity> listQuestions(Long userId) {
+        UserEntity byUserId = userService.findByUserId(userId)
+                .orElseThrow(BadRequestAlertExceptions::dataNotFound);
+        UserEntity userEntity = userService.findByUserIdAndId(byUserId.getUserId(), byUserId.getId())
+                .orElseThrow(BadRequestAlertExceptions::dataNotFound);
+        return new ArrayList<>(userEntity.getQuestionsEntity());
     }
 }

@@ -54,4 +54,9 @@ public class UserServiceImpl implements UserService {
     public Optional<UserEntity> findByUserId(Long userId) {
         return userRepository.findByUserId(userId);
     }
+
+    @Override
+    public Optional<UserEntity> findByUserIdAndId(Long userId, Long id) {
+        return userRepository.findByUserIdAndId(userId,id);
+    }
 }

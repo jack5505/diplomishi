@@ -10,4 +10,6 @@ public interface ResponseStrategy<T> {
 
     T adminMenuAddQuestions();
 
+    // T makeAnswers(Long userId);
+
 }

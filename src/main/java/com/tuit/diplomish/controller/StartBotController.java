@@ -17,10 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -67,6 +64,7 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
                 this.current = factory.getService(Text.getByText(update.getMessage().getText())
                         .orElseGet(() -> Text.DEFAULT));
             }
+            this.current = Objects.requireNonNullElse(this.current,factory.getService(Text.DEFAULT));
             this.current.execute(update);
         }else{
             sharePhoneRegister.execute(update);
