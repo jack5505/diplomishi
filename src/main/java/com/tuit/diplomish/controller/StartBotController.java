@@ -6,12 +6,14 @@ import com.tuit.diplomish.command.kernel.BotCommand;
 import com.tuit.diplomish.command.kernel.MenuOperationServiceFactory;
 import com.tuit.diplomish.common.Text;
 import com.tuit.diplomish.config.RegisterBot;
+import com.tuit.diplomish.dao.service.UserService;
 import com.tuit.diplomish.ui.ResponseStrategy;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -27,6 +29,8 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
     private final String botToken = "8019508424:AAH5MVR8-EcsSyCof8uRUablHGhEuvpprLk";
 
     private final RegisterBot registerBot;
+
+    private final User currentUser;
 
     // This helps us to change to menu to other menu
     private final Set<String> changeMenu = Set.of(Text.PHONE.getText().strip(),
@@ -59,8 +63,15 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
             log.info("text from userName: {} userId:{}",
                     update.getMessage().getFrom().getUserName(),
                     update.getMessage().getFrom().getId());
+
+
             if(changeMenu.contains(update.getMessage().getText()))
             {
+                if(currentUser.getCurrentProcessUsers().get(update.getMessage().getFrom().getId()) != null){
+                    this.current.sendCustomMessageToIntendMenu(update);
+                    return;
+                }
+
                 this.current = factory.getService(Text.getByText(update.getMessage().getText())
                         .orElseGet(() -> Text.DEFAULT));
             }

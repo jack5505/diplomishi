@@ -12,6 +12,6 @@ public interface ResponseStrategy<T> {
 
     T adminMenuAddQuestions();
 
-     T makeAnswers(List<String> answers);
+     T makeAnswers(List<MakeQuestionListUI.Answer> answers);
 
 }

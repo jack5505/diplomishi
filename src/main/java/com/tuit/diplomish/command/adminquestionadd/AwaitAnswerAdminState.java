@@ -30,7 +30,7 @@ public class AwaitAnswerAdminState implements AdminState {
         final String answer = update.getMessage().getText();
         final Long chatId = update.getMessage().getChatId();
         final Long questionId = context.getCurrentQuestionId();
-        context.getAnswerService().addAnswer(answer,questionId,context.getAnswerToQuestion() == 0);
+        context.getAnswerService().addAnswer(answer,questionId,context.getAnswerToQuestion() - 1 == 0);
         context.setAnswerToQuestion(context.getAnswerToQuestion() - 1);
         if(context.getAnswerToQuestion() != 0)
             context.sendMessage(chatId + "","Javob qoshildi! kegingi javoblarni kiriting");

@@ -58,9 +58,9 @@ public class FirstOptionResponseStrategy  implements ResponseStrategy<ReplyKeybo
     }
 
     @Override
-    public ReplyKeyboardMarkup makeAnswers(List<String> answers) {
+    public ReplyKeyboardMarkup makeAnswers(List<MakeQuestionListUI.Answer> answers) {
         return getReplyKeyboardMarkup(answers.stream()
-                .map(i -> new KeyboardButton(i))
+                .map(i -> new KeyboardButton(i.getAnswer()))
                 .map(k -> {
                     var rowTemp = new KeyboardRow();
                     rowTemp.add(k);

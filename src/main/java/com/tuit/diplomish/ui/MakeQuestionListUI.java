@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
+@Getter
 public class MakeQuestionListUI {
 
     private final QuestionService questionService;
@@ -32,9 +33,11 @@ public class MakeQuestionListUI {
     private final ResponseStrategy<ReplyKeyboardMarkup> responseStrategy;
     private Map<Long,List<AskQuestion>> questionMap = new LinkedHashMap<>();
     private Map<Long,Integer> currentUserQuestion = new HashMap<>();
-    private SharePhoneRegister sharePhoneRegister;
+    private Boolean notGoOn = true;
+
     public SendMessage makeList(Long userId,String chatId)
     {
+        notGoOn = true;
         if(questionMap.get(userId) == null || questionMap.get(userId).isEmpty())
         {
             questionMap.put(userId,questionService.listQuestions(userId)
@@ -44,29 +47,35 @@ public class MakeQuestionListUI {
                         askQuestion.setQuestion(question.getContent());
                         askQuestion.setAnswers(answerService.listAnswersToQuestion(question.getId())
                                 .stream()
-                                .map(AnswerToEntity::getAnswer)
+                                .map(entity->new Answer(entity.getAnswer(),entity.getCorrectAnswer()))
                                 .toList());
                         return askQuestion;
                     }).toList());
-            currentUserQuestion.put(userId,questionMap.get(userId).size() - 1);
+            currentUserQuestion.put(userId,questionMap.get(userId).size());
+            if(questionMap.get(userId) == null || questionMap.get(userId).isEmpty()){
+                notGoOn = false;
+                return new SendMessage(chatId,"Savolar bo`m bo`sh savol kiriting");
+            }
         }
-        AskQuestion askQuestion = questionMap.get(userId).get(currentUserQuestion.get(userId));
-        currentUserQuestion.put(userId,currentUserQuestion.get(userId) - 1);
-        if(currentUserQuestion.get(userId) == -1){
+        if(currentUserQuestion.get(userId) == 0){
+            AskQuestion askQuestion = questionMap.get(userId).get(currentUserQuestion.get(userId));
+            currentUserQuestion.put(userId,currentUserQuestion.get(userId));
             questionMap.remove(userId);
             currentUserQuestion.remove(userId);
             return new SendMessage(chatId,"congrulations you finished it");
         }
-        SendMessage sendMessage = new SendMessage(chatId,askQuestion.getQuestion());
+        AskQuestion askQuestion = questionMap.get(userId).get(currentUserQuestion.get(userId) - 1);
+        currentUserQuestion.put(userId,currentUserQuestion.get(userId) - 1);
+        SendMessage sendMessage = new SendMessage(chatId, askQuestion.getQuestion());
         sendMessage.setReplyMarkup(responseStrategy.makeAnswers(changeAnswerPlace(askQuestion.getAnswers())));
         return sendMessage;
 
     }
-    private List<String> changeAnswerPlace(List<String> answer)
+    private List<Answer> changeAnswerPlace(List<Answer> answer)
     {
-        List<String> temp = new ArrayList<>(answer);
+        List<Answer> temp = new ArrayList<>(answer);
         Random random = new Random();
-        List<String> answers = new ArrayList<>();
+        List<Answer> answers = new ArrayList<>();
         while (temp.size() > 1) {
             int size = temp.size();
             int i = random.nextInt(Math.max(size - 1, 1));
@@ -79,16 +88,29 @@ public class MakeQuestionListUI {
 
     @Getter
     @Setter
-    static class AskQuestion{
+    public static class AskQuestion{
         String question;
-        List<String> answers;
+        List<Answer> answers;
 
-        public AskQuestion(String question, List<String> answers) {
+        public AskQuestion(String question, List<Answer> answers) {
             this.question = question;
             this.answers = answers;
         }
 
         public AskQuestion() {
+        }
+    }
+    @Getter
+    @Setter
+    public static class Answer{
+        String answer;
+        Boolean correct;
+        public Answer(String answer, Boolean correct) {
+            this.answer = answer;
+            this.correct = correct;
+        }
+
+        public Answer() {
         }
     }
 

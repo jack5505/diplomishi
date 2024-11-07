@@ -30,6 +30,6 @@ public class AwaitQuestionTextAdminState implements AdminState {
         context.setAnswerToQuestion(4);
         context.getQuestionSizeToAddTouser().put(update.getMessage().getFrom().getId(), countQuestion);
         context.setAwaitQuestionCountState(awaitAdminState);
-        context.sendMessage(update.getMessage().getChatId() + "","Savol qabul qilindi ✅ \n Endi javoblarni kiriting oxirgi javob to`g`ri javob bo`lsin iltimos");
+        context.sendMessage(update.getMessage().getChatId() + "","Savol qabul qilindi ✅ \n Endi javoblarni kiriting oxirgi javob to`g`ri javob bo`lsin iltimos \n javoblar soni :" + context.getAnswerToQuestion());
     }
 }
