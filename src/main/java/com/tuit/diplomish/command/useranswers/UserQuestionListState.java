@@ -31,10 +31,9 @@ public class UserQuestionListState implements UserAnswerState {
     @Override
     public void handle(User context, Update update)
     {
-
+        final Long userId = update.getMessage().getFrom().getId();
         Map<Long, List<AskQuestion>> questionMap = context.getQuestionMap();
         SendMessage sendMessage = makeList(update.getMessage().getFrom().getId(), update.getMessage().getChatId() + "", questionMap, context);
-        context.changeState(addAnswer);
         context.sendMessage(sendMessage);
     }
 
@@ -61,6 +60,7 @@ public class UserQuestionListState implements UserAnswerState {
                 return new SendMessage(chatId,"Savolar bo`m bo`sh savol kiriting");
             }
         }
+        context.changeState(addAnswer);
         if(context.getCurrentUserQuestion().get(userId) == 0){
             context.getCurrentUserQuestion().put(userId,context.getCurrentUserQuestion().get(userId));
             questionMap.remove(userId);

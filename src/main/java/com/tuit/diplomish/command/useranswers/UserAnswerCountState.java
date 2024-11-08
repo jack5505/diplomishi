@@ -22,14 +22,12 @@ import java.util.Map;
 @Service("addAnswer")
 public class UserAnswerCountState implements UserAnswerState {
 
-    private final ResponseStrategy<ReplyKeyboardMarkup> responseStrategy;
+
     private final UserAnswerState addQuestion;
     private Map<Long,Dashboard> information = new LinkedHashMap<>();
-    private BotCommand sharePhone;
 
-    public UserAnswerCountState(ResponseStrategy<ReplyKeyboardMarkup> responseStrategy,
-                                UserAnswerState addQuestion) {
-        this.responseStrategy = responseStrategy;
+
+    public UserAnswerCountState(UserAnswerState addQuestion) {
         this.addQuestion = addQuestion;
     }
 
@@ -43,16 +41,26 @@ public class UserAnswerCountState implements UserAnswerState {
         makeCountAnswers(msg,askQuestion,userId);
         if(leftQuestion == 0) {
             Dashboard dashboard = information.get(userId);
-            context.getCurrentProcessUsers().remove(userId);
             context.sendMessage(information(dashboard,update.getMessage().getChatId() + ""));
             context.changeState(addQuestion);
-            context.getQuestionMap().remove(userId);
-            information.remove(userId);
+            clearAllData(context, userId);
             context.changeToMenu(update);
             return;
         }
         context.changeState(addQuestion);
         addQuestion.handle(context, update);
+    }
+
+    /**
+     * Clear all data that not needed one anymore to answer or to get question from
+     * @param context
+     * @param userId
+     */
+
+    private void clearAllData(User context, Long userId) {
+        context.getCurrentProcessUsers().remove(userId);
+        context.getQuestionMap().remove(userId);
+        information.remove(userId);
     }
 
     private void makeCountAnswers(String anser, MakeQuestionListUI.AskQuestion question,Long userId)
