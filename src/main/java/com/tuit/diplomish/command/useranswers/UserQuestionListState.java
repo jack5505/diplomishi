@@ -61,6 +61,7 @@ public class UserQuestionListState implements UserAnswerState {
             }
         }
         context.changeState(addAnswer);
+        context.getCurrentProcessUsers().put(userId,true);
         if(context.getCurrentUserQuestion().get(userId) == 0){
             context.getCurrentUserQuestion().put(userId,context.getCurrentUserQuestion().get(userId));
             questionMap.remove(userId);
