@@ -37,8 +37,9 @@ public class AwaitAnswerAdminState implements AdminState {
         if(context.getAnswerToQuestion() == 0){
             Long totalQuestion = context.getQuestionSizeToAddTouser().get(update.getMessage().getFrom().getId());
             totalQuestion --;
-            if(totalQuestion == -1){
+            if(totalQuestion <= -1){
                 context.setAwaitQuestionCountState(awaitQuestionCountState);
+                context.getQuestionSizeToAddTouser().remove(update.getMessage().getFrom().getId());
                 context.changeMenu(update);
                 context.sendMessage(chatId + "","Javob qoshildi! Hammasi tugatildi savol saqlandi bazaga ✅");
                 return;
