@@ -1,19 +1,16 @@
 package com.tuit.diplomish.command.useranswers;
 
 import com.tuit.diplomish.command.User;
-import com.tuit.diplomish.command.kernel.BotCommand;
 import com.tuit.diplomish.ui.MakeQuestionListUI;
-import com.tuit.diplomish.ui.ResponseStrategy;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
