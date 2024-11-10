@@ -116,12 +116,12 @@ jobs:
             sudo docker system prune -f 
             sudo docker run  -e TZ=Asia/Karachi 
             --network="host"
-            -e "SPRING_PROFILES_ACTIVE=prod"
-            -e "DB_HOST=database-1.cn4w048ysudv.ap-south-1.rds.amazonaws.com"
-            -e "DB_PORT=5432"
-            -e "DB_NAME=devdb"
-            -e "DB_USER=postgres"
-            -e "DB_PASSWORD=123456789Jack"
+            -e SPRING_PROFILES_ACTIVE=prod
+            -e DB_HOST=database-1.cn4w048ysudv.ap-south-1.rds.amazonaws.com
+            -e DB_PORT=5432
+            -e DB_NAME=devdb
+            -e DB_USER=postgres
+            -e DB_PASSWORD=123456789Jack
             --name=start_up -d -p 80:80 211125601102.dkr.ecr.ap-south-1.amazonaws.com/repo:latest
             echo "everything is done so far SUCCESS"
             echo "clean from not needed images of server"
