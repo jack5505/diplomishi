@@ -3,21 +3,23 @@ package com.tuit.diplomish.controller;
 
 import com.tuit.diplomish.command.*;
 import com.tuit.diplomish.command.kernel.BotCommand;
+import com.tuit.diplomish.command.kernel.MenuOperationServiceFactory;
 import com.tuit.diplomish.common.Text;
 import com.tuit.diplomish.config.RegisterBot;
+import com.tuit.diplomish.dao.service.UserService;
 import com.tuit.diplomish.ui.ResponseStrategy;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,31 +28,25 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
 
     private final String botToken = "8019508424:AAH5MVR8-EcsSyCof8uRUablHGhEuvpprLk";
 
-    private final TelegramClient telegramClient;
-
     private final RegisterBot registerBot;
 
-    private final ResponseStrategy<ReplyKeyboardMarkup> responseStrategy;
+    private final User currentUser;
 
-    private final Login login;
+    // This helps us to change to menu to other menu
+    private final Set<String> changeMenu = Set.of(Text.PHONE.getText().strip(),
+                                                  Text.ADMIN.getText().strip(),
+                                                  Text.USER.getText().strip(),
+                                                  Text.LOGIN.getText().strip(),
+                                                  Text.REGISTER.getText().strip(),
+                                                  Text.START.getText().strip(),
+                                                  Text.ADMIN_ADD_QUESTIONS.getText().strip());
 
-    private final Register register;
-
-    private final Start start;
-
+    private final MenuOperationServiceFactory factory;
+    private BotCommand current;
     private final SharePhoneRegister sharePhoneRegister;
-
-    private final DefaultAnswer defaultAnswer;
-
-    private final Map<String,BotCommand> allActions = new HashMap<>();
-
 
     @PostConstruct
     public void init() {
-        allActions.put(Text.START,start);
-        allActions.put(Text.REGISTER.strip(),register);
-        allActions.put(Text.LOGIN.strip(),login);
-        allActions.put(Text.PHONE.strip(),sharePhoneRegister);
         try {
             registerBot.registerBot(botToken,this);
         } catch (TelegramApiException e) {
@@ -67,7 +63,20 @@ public class StartBotController implements LongPollingSingleThreadUpdateConsumer
             log.info("text from userName: {} userId:{}",
                     update.getMessage().getFrom().getUserName(),
                     update.getMessage().getFrom().getId());
-            allActions.getOrDefault(update.getMessage().getText(),defaultAnswer).execute(update);
+
+
+            if(changeMenu.contains(update.getMessage().getText()))
+            {
+                if(currentUser.getCurrentProcessUsers().get(update.getMessage().getFrom().getId()) != null){
+                    this.current.sendCustomMessageToIntendMenu(update);
+                    return;
+                }
+
+                this.current = factory.getService(Text.getByText(update.getMessage().getText())
+                        .orElseGet(() -> Text.DEFAULT));
+            }
+            this.current = Objects.requireNonNullElse(this.current,factory.getService(Text.DEFAULT));
+            this.current.execute(update);
         }else{
             sharePhoneRegister.execute(update);
         }

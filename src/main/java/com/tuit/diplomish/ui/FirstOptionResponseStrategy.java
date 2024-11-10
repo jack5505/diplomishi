@@ -12,16 +12,18 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service("FIRST_RESPONSE")
 public class FirstOptionResponseStrategy  implements ResponseStrategy<ReplyKeyboardMarkup>{
 
     @Override
     public ReplyKeyboardMarkup makeResponse() {
-        KeyboardButton button = new KeyboardButton(Text.REGISTER);
+        KeyboardButton button = new KeyboardButton(Text.REGISTER.getText());
         KeyboardRow row = new KeyboardRow();
         row.add(button);
-        KeyboardButton login = new KeyboardButton(Text.LOGIN);
+        KeyboardButton login = new KeyboardButton(Text.LOGIN.getText());
         KeyboardRow row2 = new KeyboardRow();
         row2.add(login);
         return  getReplyKeyboardMarkup(row,row2);
@@ -29,7 +31,7 @@ public class FirstOptionResponseStrategy  implements ResponseStrategy<ReplyKeybo
 
     @Override
     public ReplyKeyboardMarkup sharePhoneNumberToRegister() {
-        KeyboardButton button = new KeyboardButton(Text.PHONE);
+        KeyboardButton button = new KeyboardButton(Text.PHONE.getText());
         button.setRequestContact(true);
         KeyboardRow row = new KeyboardRow();
         row.add(button);
@@ -38,13 +40,38 @@ public class FirstOptionResponseStrategy  implements ResponseStrategy<ReplyKeybo
 
     @Override
     public ReplyKeyboardMarkup chooseOption() {
-        KeyboardButton admin = new KeyboardButton(Text.ADMIN);
+        KeyboardButton admin = new KeyboardButton(Text.ADMIN.getText());
         KeyboardRow row = new KeyboardRow();
         row.add(admin);
-        KeyboardButton user = new KeyboardButton(Text.USER);
+        KeyboardButton user = new KeyboardButton(Text.USER.getText());
         KeyboardRow row1 = new KeyboardRow();
         row1.add(user);
         return getReplyKeyboardMarkup(row,row1);
+    }
+
+    @Override
+    public ReplyKeyboardMarkup adminMenuAddQuestions() {
+        KeyboardButton button = new KeyboardButton(Text.ADMIN_ADD_QUESTIONS.getText());
+        KeyboardRow row = new KeyboardRow();
+        row.add(button);
+        return getReplyKeyboardMarkup(row);
+    }
+
+    @Override
+    public ReplyKeyboardMarkup makeAnswers(List<MakeQuestionListUI.Answer> answers) {
+        return getReplyKeyboardMarkup(answers.stream()
+                .map(i -> new KeyboardButton(i.getAnswer()))
+                .map(k -> {
+                    var rowTemp = new KeyboardRow();
+                    rowTemp.add(k);
+                    return rowTemp;
+                }).toList());
+    }
+
+    private static ReplyKeyboardMarkup getReplyKeyboardMarkup(List<KeyboardRow> row) {
+        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup(row);
+        markup.setResizeKeyboard(true);
+        return markup;
     }
 
     @NotNull

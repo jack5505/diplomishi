@@ -1,6 +1,7 @@
 package com.tuit.diplomish.command;
 
 import com.tuit.diplomish.command.kernel.TelegramSendMessage;
+import com.tuit.diplomish.dao.service.UserService;
 import com.tuit.diplomish.ui.ResponseStrategy;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -8,11 +9,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-@Service
+@Service("REGISTER")
 public class Register  extends TelegramSendMessage {
 
     private final ResponseStrategy<ReplyKeyboardMarkup> responseStrategy;
     private final TelegramClient telegramClient;
+
 
     public Register(ResponseStrategy<ReplyKeyboardMarkup> responseStrategy,
                     TelegramClient telegramClient)

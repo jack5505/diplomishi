@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.Objects;
 
-@Service
+@Service("DEFAULT")
 public class DefaultAnswer extends TelegramSendMessage {
     private final TelegramClient telegramClient;
 
