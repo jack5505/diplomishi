@@ -20,7 +20,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
     private final UserService userService;
-    private final Integer totalSizeQuestion = 2;
+    private final Integer totalSizeQuestion = 20;
 
     @Override
     public QuestionsEntity save(QuestionsEntity entity) {

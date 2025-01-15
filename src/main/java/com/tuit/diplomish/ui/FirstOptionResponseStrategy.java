@@ -40,13 +40,13 @@ public class FirstOptionResponseStrategy  implements ResponseStrategy<ReplyKeybo
 
     @Override
     public ReplyKeyboardMarkup chooseOption() {
-        KeyboardButton admin = new KeyboardButton(Text.ADMIN.getText());
-        KeyboardRow row = new KeyboardRow();
-        row.add(admin);
+//        KeyboardButton admin = new KeyboardButton(Text.ADMIN.getText());
+//        KeyboardRow row = new KeyboardRow();
+//        row.add(admin);
         KeyboardButton user = new KeyboardButton(Text.USER.getText());
         KeyboardRow row1 = new KeyboardRow();
         row1.add(user);
-        return getReplyKeyboardMarkup(row,row1);
+        return getReplyKeyboardMarkup(row1);
     }
 
     @Override
