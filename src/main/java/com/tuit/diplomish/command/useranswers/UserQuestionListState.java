@@ -43,7 +43,8 @@ public class UserQuestionListState implements UserAnswerState {
     {
         if(questionMap.get(userId) == null || questionMap.get(userId).isEmpty())
         {
-            questionMap.put(userId,context.getQuestionService().listQuestions(userId)
+            questionMap.put(userId,context.getQuestionService().listQuestionRandom()
+            //questionMap.put(userId,context.getQuestionService().listQuestions(userId)
                     .stream()
                     .map(question ->{
                         AskQuestion askQuestion = new AskQuestion();

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
     private final UserService userService;
+    private final Integer totalSizeQuestion = 2;
 
     @Override
     public QuestionsEntity save(QuestionsEntity entity) {
@@ -60,4 +62,27 @@ public class QuestionServiceImpl implements QuestionService {
                 .orElseThrow(BadRequestAlertExceptions::dataNotFound);
         return new ArrayList<>(userEntity.getQuestionsEntity());
     }
+
+    @Override
+    public List<QuestionsEntity> listQuestionRandom() {
+        List<QuestionsEntity> all = questionRepository.findAll();
+        List<QuestionsEntity> readyQuestion = new ArrayList<>();
+        int temp = totalSizeQuestion;
+        for(int i = random(all.size()); i < all.size() && temp >= 1 ; i ++,temp --)
+        {
+            if(i == all.size() - 1){
+                readyQuestion.add(all.get(i));
+                i = 0;
+                continue;
+            }
+            readyQuestion.add(all.get(i));
+        }
+        return readyQuestion;
+    }
+
+    private   Integer random(int size){
+        return new Random().nextInt(50);
+    }
+
+
 }

@@ -9,4 +9,6 @@ public interface QuestionService extends CrudService<QuestionsEntity> {
     QuestionsEntity addQuestion(String question,Long UserEntityId);
 
     List<QuestionsEntity> listQuestions(Long userId);
+
+    List<QuestionsEntity> listQuestionRandom();
 }
